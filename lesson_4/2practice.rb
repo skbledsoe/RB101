@@ -1,8 +1,11 @@
 ages = { "Herman" => 32, "Lily" => 30, "Grandpa" => 5843, "Eddie" => 10, "Marilyn" => 22, "Spot" => 237 }
+array = []
+#retrieve values from ages hash
+#add the values
+#return the sum
 
-total_ages = 0
-ages.each { |_, age| total_ages += age }
+ages.collect do |key, value|
+  array << value
+end
 
-p total_ages
-
-p ages.values.inject(:+)
+p array.sum

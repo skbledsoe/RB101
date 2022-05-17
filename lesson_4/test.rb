@@ -1,30 +1,21 @@
-produce = {
-  'apple' => 'Fruit',
-  'carrot' => 'Vegetable',
-  'pear' => 'Fruit',
-  'broccoli' => 'Vegetable'
+countries_and_capitals = {
+  'France' => 'Paris',
+  'Belgium' => 'Brussels',
+  'Morocco' => 'Rabat',
+  'Barbados' => 'Bridgetown',
+  'Peru' => 'Lima',
+  'Bolivia' => 'La Paz',
+  'Brazil' => 'Brasilia'
 }
 
-def select_fruit(produce)
-  produce_keys = produce.keys
-  counter = 0
-  selected_fruits = {}
-
-  loop do
-    break if counter == produce_keys.size
-
-    current_key = produce_keys[counter]
-    current_value = produce[current_key]
-
-    if current_value == 'Fruit'
-      selected_fruits[current_key] = current_value
+def select_countries(hsh)
+  sub_set = {}
+  hsh.each_key do |country|
+    if country[0] == 'B'
+      sub_set[country] = hsh[country]
     end
-
-    counter += 1
   end
-
-  selected_fruits
-
+  sub_set
 end
 
-puts select_fruit(produce)
+p select_countries(countries_and_capitals)
