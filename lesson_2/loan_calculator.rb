@@ -1,72 +1,108 @@
-#loan amount 14,000
-#APR 3%
-#loan duration 72 months (6 years)
+=begin
+  Build a loan calculator that takes the loan amount, the APR, and
+  loan duration and calculates the monthly interest rate, loan
+  duration in months, and the monthly payment.
+input: float
+output: float
 
-#monthly interest rate 
-#loan duration in months
-#monthly payment
+Algorithm:
+  - get the loan amount from user
+    -validate input
+      -positive number, no non-numeric characters
+  -get APR from user
+    -validate input
+      -positive number, float, no non-numeric characters
+    -convert to monthly interest rate (MIR)
+  -get loan duration in years from user
+    -validate input
+      -positive number, float, no non-numeric characters
+    -convert to loan duration in months
+  -use formula to find monthly payment, store in result variable
+    -loan_amount * (MIR / (1 - (1 + MIR)**(-month_duration)))
+  -return result
+=end
 
-# 
-def prompt(message)
-  puts message
+def prompt(msg)
+  puts msg.to_s
 end
 
-def valid_number?(num)
-  num.to_i != 0
+def valid_num?(num)
+  num = num.gsub(/[^0-9]/, '')
+  num.to_i.positive? && ( num.to_i.to_s == num || num.to_f.to_s == num)
 end
 
-# def annual_to_month(num)
-#   num.to_f / 12
-# end
+def valid_float?(num)
+  num = num.gsub(/[^0-9]/, '')
+  (num.to_i.positive? || num.to_f == 0.0) && (num.to_i.to_s == num || num.to_f.to_s == num)
+end
+
+def annual_to_monthly(percent)
+  percent = percent.to_f / 100
+  percent /=  12
+end
+
+def years_to_months(year)
+  year = year.to_f * 12
+end
+
+prompt("Welcome to the Loan Calculator!")
+prompt("What is your name?")
+name = nil
+loop do
+  name = gets.chomp 
+
+  break unless name.empty?
+  prompt("Please enter your name!")
+end
+
+prompt("Hi, #{name}! Let's get to calculating...")
 
 loop do
-  prompt("What is the amount of your loan?")
   loan_amount = nil
   loop do
+    prompt("What is your loan amount?")
     loan_amount = gets.chomp
 
-    if loan_amount.empty? || loan_amount.to_f < 0
-      prompt("Must enter a positive number.")
-    else
+    if valid_num?(loan_amount)
       break
+    else
+      prompt("Invalid input, please try again.")
     end
   end
 
-  prompt("What is your APR?")
-  interest = nil
+  apr = nil
   loop do
-    interest = gets.chomp
+    prompt("What is your APR? (1 for 1%, 2 for 2%, etc)")
+    apr = gets.chomp
 
-    if interest.empty? || interest.to_f < 0
-      prompt("Must enter a positive number.")
-    else
+    if valid_float?(apr)
       break
+    else
+      prompt("Invalid input, please try again.")
     end
   end
 
-  prompt("How long, in years, is your loan?")
-  duration = nil
+  loan_years = nil
   loop do
-    
-    duration = gets.chomp
+    prompt("How long, in years, is your loan?")
+    loan_years = gets.chomp
 
-    if duration.empty? || duration.to_f < 0
-      prompt("Enter a valid number")
-    else
+    if valid_float?(loan_years)
       break
+    else
+      prompt("Invalid input, please try again.")
     end
   end
 
-  annual_interest = interest.to_f / 100
-  monthly_interest = annual_interest / 12
-  months = duration.to_i * 12
+  monthly_interest = annual_to_monthly(apr)
+  loan_months = years_to_months(loan_years)
+  result = loan_amount.to_f * (monthly_interest / 
+            (1 - (1 + monthly_interest)**(-loan_months)))
 
-  monthly_payment = loan_amount.to_f * (monthly_interest / (1 - (1 + monthly_interest)**(-months)))
-  
-  prompt("Your monthly payment is: $#{format('%.2f', monthly_payment)}")
-  
-  prompt("Another calculation?")
+  prompt("#{name}, your monthly payment is $#{format('%.2f', result)}.")
+  prompt("Would you like to make another calculation?")
   answer = gets.chomp
-  
-  break unless answer.downcase.include?('y')
+  break unless answer.downcase.start_with?('y')
 end
+
+prompt("Thanks for using the loan calculator, #{name}!")
