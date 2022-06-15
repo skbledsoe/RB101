@@ -28,7 +28,7 @@ end
 
 def valid_num?(num)
   num = num.gsub(/[^0-9]/, '')
-  num.to_i.positive? && ( num.to_i.to_s == num || num.to_f.to_s == num)
+  num.to_i.positive? && (num.to_i.to_s == num || num.to_f.to_s == num)
 end
 
 def valid_float?(num)
@@ -38,18 +38,25 @@ end
 
 def annual_to_monthly(percent)
   percent = percent.to_f / 100
-  percent /=  12
+  percent / 12
 end
 
 def years_to_months(year)
-  year = year.to_f * 12
+  year.to_f * 12
 end
+
+# def loan_amount?
+#   prompt("What is your loan amount?")
+#   loan_amount = gets.chomp
+
+#   prompt("Invalid input, please try again.") unless valid_num?(loan_amount)  
+# end
 
 prompt("Welcome to the Loan Calculator!")
 prompt("What is your name?")
 name = nil
 loop do
-  name = gets.chomp 
+  name = gets.chomp
 
   break unless name.empty?
   prompt("Please enter your name!")
